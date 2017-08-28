@@ -1,0 +1,5 @@
+查看端口号
+netstat -lnp|grep 88
+
+杀死端口号
+kill -9 2433
