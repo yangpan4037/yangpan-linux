@@ -1,0 +1,109 @@
+﻿查看自己是否安装了MySQL数据库
+rpm -qa | grep mysql
+
+
+如果安装会显示mysql信息，我们卸载重新安装
+卸载有两种方式，一种是普通删除，另一种是强力删除，当MySQL数据库有其它的依赖文件时，也进行删除。
+分别是：rpm -e mysql 和rpm -e --nodeps mysql
+
+
+查看yum上提供的数据库可下载版本
+yum list | grep mysql
+
+这里值得注意，我想安装mysql 5.7 但是没有，所以我下载YUM库
+wget http://dev.mysql.com/get/mysql57-community-release-el7-7.noarch.rpm
+
+
+安装YUM库
+yum localinstall -y mysql57-community-release-el7-7.noarch.rpm
+
+
+安装数据库
+yum install -y mysql-community-server
+
+
+启动MySQL服务
+systemctl start mysqld.service
+
+
+登录（默认密码空）
+mysql -uroot -p
+
+
+重置root密码后重启mysql服务
+update mysql.user set authentication_string=password("ssstc*#mysql%&") where user="root" and Host="localhost";
+flush privileges;
+quit;
+systemctl restart mysqld;
+
+
+
+
+注意如果手贱或者不知道啥原因出现如下问题：
+ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: NO)
+请修改my.cnf,添加skip-grant-tables
+vi /etc/my.cnf
+在mysqld添加跳过验证
+[mysqld]
+skip-grant-tables
+
+
+重启
+systemctl stop mysqld;
+systemctl restart mysqld;
+
+
+登录
+mysql -u root -p
+
+
+修改密码
+ssstc*#mysql%&
+update mysql.user set authentication_string=password("ssstc*#mysql%&") where user="root" and Host="localhost";
+
+
+退出mysql
+exit;
+
+
+去掉my.cnf添加的跳过验证。
+vi /etc/my.cnf
+在mysqld删除跳过验证
+[mysqld]
+skip-grant-tables
+
+
+重启
+systemctl stop mysqld;
+systemctl restart mysqld;
+
+
+配置添加远程登录用户(登入Mysql)
+use mysql;
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'ssstc*#mysql%&' WITH GRANT OPTION;
+注：'%'代表任意地址，也可以指定IP
+
+
+检查用户表，刷新内存权限
+select host, user from user;
+FLUSH PRIVILEGES;
+
+
+注意如果是阿里云需要去安全组修改，才能本地连接3306端口
+具体是
+登录阿里云=》控制台=》云服务器ECS=>网络和安全->安全组=》入方向=》添加安全组规则
+注意授权对象填 0.0.0.0/0 表示全部
+
+
+
+如果出现
+ERROR 1820 (HY000): You must reset your password using ALTER USER statement before executing this statement.
+修改密码
+alter user 'root'@'localhost' identified by 'ssstc*#mysql%&';
+flush privileges;
+
+
+如果出现
+1130-host ... is not allowed to connect to this MySql server
+修改远程访问权限
+update user set host = '%' where user = 'root';

@@ -1,0 +1,14 @@
+官网找到最新版本安装包
+http://tomcat.apache.org/download-80.cgi
+
+找到想要安装的版本，拷贝地址
+http://mirror.bit.edu.cn/apache/tomcat/tomcat-8/v8.5.20/bin/apache-tomcat-8.5.20.tar.gz
+
+
+下载到/usr/local/src
+cd /usr/local/src
+wget http://mirror.bit.edu.cn/apache/tomcat/tomcat-8/v8.5.20/bin/apache-tomcat-8.5.20.tar.gz
+
+
+解压到/usr/local
+tar -zxvf /usr/local/src/apache-tomcat-8.5.20.tar.gz -C /usr/local/

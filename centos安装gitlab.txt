@@ -1,0 +1,46 @@
+gitlab安装教程 => 详细参见https://www.gitlab.com.cn/installation/#centos-7
+
+注意请关闭tomcat，由于默认tomcat占用8080，而gitlab会使用8080，所以安装gitlab时请关闭tomcat，或者修改tomcat端口
+
+1. 安装并配置必要的依赖关系 
+sudo yum install curl policycoreutils openssh-server openssh-clients
+sudo systemctl enable sshd
+sudo systemctl start sshd
+sudo yum install postfix
+sudo systemctl enable postfix
+sudo systemctl start postfix
+sudo firewall-cmd --permanent --add-service=http
+sudo systemctl reload firewalld
+
+
+2. 添加 GitLab 镜像源并安装 镜像源可以浏览https://mirrors.tuna.tsinghua.edu.cn/gitlab-ce/yum/el7查看
+curl -LJO https://mirrors.tuna.tsinghua.edu.cn/gitlab-ce/yum/el7/gitlab-ce-9.5.0-ce.0.el7.x86_64.rpm
+rpm -i gitlab-ce-9.5.0-ce.0.el7.x86_64.rpm
+
+3. 配置并启动 GitLab
+sudo gitlab-ctl reconfigure
+
+浏览器访问ip，重新设置密码，然后登录，系统默认的管理员账号为 root
+
+
+修改项目访问地址
+vim /opt/gitlab/embedded/service/gitlab-rails/config/gitlab.yml
+修改host
+
+
+下面方法不要用
+===============================================
+http地址
+vim  /var/opt/gitlab/nginx/conf/gitlab-http.conf
+修改server_name 120.27.9.170;
+================================================
+
+
+
+
+
+查看版本
+cat /opt/gitlab/embedded/service/gitlab-rails/VERSION
+重启
+gitlab-ctl restart
+

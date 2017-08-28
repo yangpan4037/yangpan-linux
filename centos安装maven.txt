@@ -1,0 +1,33 @@
+官网找到最新版的安装包：
+http://maven.apache.org/download.cgi
+
+
+拷贝文件名为 *-bin.tar.gz 的链接地址；
+http://mirrors.tuna.tsinghua.edu.cn/apache/maven/maven-3/3.5.0/binaries/apache-maven-3.5.0-bin.tar.gz
+
+
+下载到/usr/local/src
+cd /usr/local/src
+wget http://mirrors.tuna.tsinghua.edu.cn/apache/maven/maven-3/3.5.0/binaries/apache-maven-3.5.0-bin.tar.gz
+
+
+解压到/usr/local
+tar -zxvf /usr/local/src/apache-maven-3.5.0-bin.tar.gz -C /usr/local/
+
+
+配置环境变量
+vi /etc/profile
+export MAVEN_HOME=/usr/local/apache-maven-3.5.0
+export PATH=$PATH:$MAVEN_HOME/bin
+
+
+立即生效
+source /etc/profile
+
+
+查看path是否有添加的maven
+echo $PATH
+
+
+验证是否安装成功
+mvn -version
