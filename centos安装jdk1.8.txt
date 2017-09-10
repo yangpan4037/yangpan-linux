@@ -19,11 +19,11 @@ yum remove java-1.7.0-openjdk
 地址
 http://www.oracle.com/technetwork/java/javase/downloads/index.html
 http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+上传新的jdk-8u144-linux-x64.rpm软件到/usr/local/src
+或者直接在usr/local/src 用wget http://xxx.xxx下载，推荐
 
-
-
-上传新的jdk-8u144-linux-x64.rpm软件到/usr/local/执行以下操作：
-cd /usr/local/
+解压安装
+cd /usr/local/src
 rpm -ivh jdk-8u25-linux-x64.rpm
 
 
