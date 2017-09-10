@@ -104,6 +104,15 @@ flush privileges;
 
 
 如果出现
+ERROR 1819 (HY000): Your password does not satisfy the current policy requirements
+set global validate_password_policy=0;//其实是安全机制造成的，判断密码的标准就基于密码的长度了，这个由validate_password_length参数来决定。
+然后再修改密码
+alter user 'root'@'localhost' identified by 'ssstc*#mysql%&';
+flush privileges;
+
+
+如果出现
 1130-host ... is not allowed to connect to this MySql server
 修改远程访问权限
 update user set host = '%' where user = 'root';
+flush privileges;
