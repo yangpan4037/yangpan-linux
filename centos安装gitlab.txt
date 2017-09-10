@@ -16,6 +16,7 @@ sudo systemctl reload firewalld
 2. 添加 GitLab 镜像源并安装 镜像源可以浏览https://mirrors.tuna.tsinghua.edu.cn/gitlab-ce/yum/el7查看
 curl -LJO https://mirrors.tuna.tsinghua.edu.cn/gitlab-ce/yum/el7/gitlab-ce-9.5.0-ce.0.el7.x86_64.rpm
 rpm -i gitlab-ce-9.5.0-ce.0.el7.x86_64.rpm
+注意curl表示单个下载，一定先 cd /usr/local/src再下载
 
 3. 配置并启动 GitLab
 sudo gitlab-ctl reconfigure
