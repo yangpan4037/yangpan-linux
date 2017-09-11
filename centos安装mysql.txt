@@ -25,9 +25,18 @@ yum install -y mysql-community-server
 启动MySQL服务
 systemctl start mysqld.service
 
+默认密码
+打开/var/log/mysqld.log文件，搜索字符串A temporary password is generated for root@localhost:，可以找到这个随机密码，通常这一行日志在log文件的最初几行，比较容易看到。
 
-登录（默认密码空）
+登录
 mysql -uroot -p
+
+第一次登录需要修改密码，否则出现1820错误
+alter user 'root'@'localhost' identified by 'ssstc*#mysql%&';
+
+如果出现1819错误，说明密码安全性等级过低，如果没出现，那么说明你设置的密码够难度哦
+set global validate_password_policy=0;
+然后重复再alter user 'root'@'localhost' identified by 'ssstc*#mysql%&';
 
 
 重置root密码后重启mysql服务
@@ -35,8 +44,6 @@ update mysql.user set authentication_string=password("ssstc*#mysql%&") where use
 flush privileges;
 quit;
 systemctl restart mysqld;
-
-
 
 
 注意如果手贱或者不知道啥原因出现如下问题：
@@ -55,6 +62,7 @@ systemctl restart mysqld;
 
 登录
 mysql -u root -p
+
 
 
 修改密码
