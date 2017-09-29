@@ -1,0 +1,17 @@
+查找需要安装的版本
+	http://mirror.centos.org/centos/6/os/x86_64/Packages/
+
+下载到/usr/local/src
+	cd /usr/local/src
+	wget http://mirror.centos.org/centos/6/os/x86_64/Packages/ftp-0.17-54.el6.x86_64.rpm
+
+rpm 安装
+	rpm -Uvh ftp-0.17-54.el6.x86_64.rpm
+
+登录ftp客户端
+	ftp ip
+	passive
+  
+  
+  
+  pasv_promiscuous=YES
