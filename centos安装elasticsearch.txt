@@ -1,7 +1,7 @@
-请确保安装jdk,建议jdk8
+﻿请确保安装jdk,建议jdk8
 
 官网找到最新版的安装包：
-http://www.cnblogs.com/weiweictgu/p/5517717.html
+https://www.elastic.co/downloads/elasticsearch#ga-release
 
 
 找到想要安装的版本，拷贝地址
@@ -67,3 +67,43 @@ sh /usr/local/elasticsearch-2.4.4/bin/elasticsearch -d -Des.insecure.allow.root=
 关闭 
 ps -ef|grep elasticsearch
 kill -9 pid
+
+
+
+=======================================================================================================================================================
+Java HotSpot(TM) 64-Bit Server VM warning: INFO: os::commit_memory(0x0000000085330000, 2060255232, 0) failed; error='Cannot allocate memory' (errno=12)
+注意elasticsearch 5.0以上默认分配2G内存，不能启动，所以要修改内存
+vim /usr/local/elasticsearch-5.6.2/config/jvm.options
+
+看到下面吗：
+-Xms2g
+-Xmx2g
+改成：
+-Xms256m
+-Xmx256m
+根据自己配置来，我的内存总共2G,还要用其他的东西就不给它分配多了
+=======================================================================================================================================================
+
+
+如果是elasticsearch 5.0以上建议建议创建一个单独的用户用来运行ElasticSearch
+创建elasticsearch用户组及elasticsearch用户和设置密码
+groupadd elasticsearch
+useradd elasticsearch -g elasticsearch -p elasticsearch
+passwd  elasticsearch
+chown -R elasticsearch:elasticsearch /usr/local/elasticsearch-5.6.2/
+
+
+
+bootstrap checks failed
+max file descriptors [65535] for elasticsearch process is too low, increase to at least [65536]
+vi /etc/sysctl.conf
+新增fs.file-max=655350
+保存之后sysctl -p使设置生效
+2、vi /etc/security/limits.conf 新增
+* soft nofile 655350
+* hard nofile 655350
+
+
+max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]
+修改/etc/sysctl.conf配置文件
+vm.max_map_count=262144
