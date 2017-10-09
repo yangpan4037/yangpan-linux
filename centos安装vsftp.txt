@@ -1,0 +1,18 @@
+查看是否安装了vsftp
+	rpm -qa |grep vsftp
+
+卸载vsftp
+	rpm -e 这里是上面查询的结果
+
+安装
+	yum install -y vsftp
+	yum -y install vsftpd
+
+查看位置
+	whereis vsftpd
+
+启动	
+	systemctl start vsftpd.service
+
+开机启动
+	systemctl enable vsftpd.service

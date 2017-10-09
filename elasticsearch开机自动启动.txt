@@ -1,0 +1,21 @@
+vi /lib/systemd/system/elasticsearch.service
+
+[Unit]
+Description=elasticsearch
+After=network.target
+  
+[Service]
+Type=forking
+ExecStart=/usr/local/elasticsearch-2.4.4/bin/elasticsearch -d -Des.insecure.allow.root=true
+ExecReload=
+ExecStop=
+PrivateTmp=true
+  
+[Install]
+WantedBy=multi-user.target
+
+开机启动
+systemctl enable elasticsearch.service
+
+启动
+systemctl start elasticsearch.service

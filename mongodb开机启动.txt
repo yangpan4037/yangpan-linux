@@ -1,0 +1,18 @@
+vi /lib/systemd/system/mongod.service
+
+[Unit]
+Description=mongod
+After=network.target
+  
+[Service]
+Type=forking
+ExecStart=/usr/local/mongodb-3.4.7/bin/mongod --fork --config=/usr/local/mongodb-3.4.7/bin/mongod.cfg
+ExecReload=
+ExecStop=/usr/local/mongodb-3.4.7/bin/mongod --shutdown --config=/usr/local/mongodb-3.4.7/bin/mongod.cfg
+PrivateTmp=true
+  
+[Install]
+WantedBy=multi-user.target
+
+开机启动
+systemctl enable mongod.service

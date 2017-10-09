@@ -11,7 +11,3 @@ rpm 安装
 登录ftp客户端
 	ftp ip
 	passive
-  
-  
-  
-  pasv_promiscuous=YES
