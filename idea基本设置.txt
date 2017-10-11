@@ -1,0 +1,9 @@
+设置黑色主题
+	Darcula
+设置编码
+	File Encoding	=>	全部改成utf8
+设置主题
+	File	=>	import settings
+		G:\yangpan\installPackage\intelliJ-Idea\sublime-monokai-true.jar
+	File 	=> 	settings 	=> 	Editor
+		选择主题，设置字体

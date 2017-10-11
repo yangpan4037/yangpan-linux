@@ -1,0 +1,45 @@
+官网找到最新版的安装包：
+https://www.mongodb.com/download-center#community
+
+
+找到想要安装的版本，拷贝地址
+https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-3.4.7.tgz
+
+
+下载到/usr/local/src
+cd /usr/local/src
+wget https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-amazon-3.4.7.tgz
+
+
+解压到/usr/local
+tar -zxvf /usr/local/src/mongodb-linux-x86_64-amazon-3.4.7.tgz -C /usr/local/
+
+
+重命名
+mv mongodb-linux-x86_64-amazon-3.4.7 mongodb-3.4.7
+
+
+创建数据和日志文件夹
+mkdir /usr/local/mongodb-3.4.7/db
+mkdir /usr/local/mongodb-3.4.7/logs
+
+
+新增配置文件，并指定数据和日志位置
+cd /usr/local/mongodb-3.4.7/bin/
+vi mongod.cfg
+内容：
+dbpath=/usr/local/mongodb-3.4.7/db
+logpath=/usr/local/mongodb-3.4.7/logs/mongod.log
+
+------可不配---------------
+port=27017
+fork=true
+nohttpinterface=true
+------可不配---------------
+
+
+ 尝试执行
+ cd /usr/local/mongodb-3.4.7/bin && ./mongod --config=/usr/local/mongodb-3.4.7/bin/mongod.cfg
+
+
+ 参考：http://www.cnblogs.com/weiweictgu/p/5517717.html

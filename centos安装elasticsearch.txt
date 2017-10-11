@@ -1,0 +1,109 @@
+﻿请确保安装jdk,建议jdk8
+
+官网找到最新版的安装包：
+https://www.elastic.co/downloads/elasticsearch#ga-release
+
+
+找到想要安装的版本，拷贝地址
+https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.4.4/elasticsearch-2.4.4.tar.gz
+
+
+下载到/usr/local/src
+cd /usr/local/src
+wget https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.4.4/elasticsearch-2.4.4.tar.gz
+
+
+解压到/usr/local
+tar -zxvf /usr/local/src/elasticsearch-2.4.4.tar.gz -C /usr/local/
+
+
+运行elasticsearch,其中-d表示后台启动
+sh /usr/local/elasticsearch-2.4.0/bin/elasticsearch -d
+
+
+	出现错误
+	[root@localhostbin]#
+	 Exception in thread "main" java.lang.RuntimeException: don't run elasticsearch as root.
+	      atorg.elasticsearch.bootstrap.Bootstrap.initializeNatives(Bootstrap.java:94)
+	      atorg.elasticsearch.bootstrap.Bootstrap.setup(Bootstrap.java:160)
+	      atorg.elasticsearch.bootstrap.Bootstrap.init(Bootstrap.java:286)
+	      atorg.elasticsearch.bootstrap.Elasticsearch.main(Elasticsearch.java:35)
+	Refertothelogforcompleteerrordetails.
+
+	原因是elasticsearch默认是不支持用root用户来启动的。
+	解决方案一：Des.insecure.allow.root=true
+	修改/usr/local/elasticsearch-2.4.4/bin/elasticsearch，添加 ES_JAVA_OPTS="-Des.insecure.allow.root=true"
+	或执行时添加： sh /usr/local/elasticsearch-2.4.4/bin/elasticsearch -d -Des.insecure.allow.root=true
+	注意：正式环境用root运行可能会有安全风险，不建议用root来跑。
+	解决方案二：添加专门的用户
+	useradd elastic
+	chown -R elastic:elastic elasticsearch-2.4.4
+	su elastic
+	sh /usr/local/elasticsearch-2.4.4/bin/elasticsearch-d
+
+	使用 curl http://localhost:9200/ 查看是否运行，如果返回如下信息则标示运行正常：
+	{
+	  "name" : "Fault Zone",
+	  "cluster_name" : "elasticsearch",
+	  "cluster_uuid" : "kXlt3MEuS1mV4kIXN1E6vw",
+	  "version" : {
+	    "number" : "2.4.4",
+	    "build_hash" : "fcbb46dfd45562a9cf00c604b30849a6dec6b017",
+	    "build_timestamp" : "2017-01-03T11:33:16Z",
+	    "build_snapshot" : false,
+	    "lucene_version" : "5.5.2"
+	  },
+	  "tagline" : "You Know, for Search"
+	}
+
+修改外网可以访问
+vim /usr/local/elasticsearch-2.4.4/config/elasticsearch.yml
+搜索network.host
+修改network.host: 0.0.0.0
+
+开启
+sh /usr/local/elasticsearch-2.4.4/bin/elasticsearch -d -Des.insecure.allow.root=true
+
+关闭 
+ps -ef|grep elasticsearch
+kill -9 pid
+
+
+
+=======================================================================================================================================================
+Java HotSpot(TM) 64-Bit Server VM warning: INFO: os::commit_memory(0x0000000085330000, 2060255232, 0) failed; error='Cannot allocate memory' (errno=12)
+注意elasticsearch 5.0以上默认分配2G内存，不能启动，所以要修改内存
+vim /usr/local/elasticsearch-5.6.2/config/jvm.options
+
+看到下面吗：
+-Xms2g
+-Xmx2g
+改成：
+-Xms256m
+-Xmx256m
+根据自己配置来，我的内存总共2G,还要用其他的东西就不给它分配多了
+=======================================================================================================================================================
+
+
+如果是elasticsearch 5.0以上建议建议创建一个单独的用户用来运行ElasticSearch
+创建elasticsearch用户组及elasticsearch用户和设置密码
+groupadd elasticsearch
+useradd elasticsearch -g elasticsearch -p elasticsearch
+passwd  elasticsearch
+chown -R elasticsearch:elasticsearch /usr/local/elasticsearch-5.6.2/
+
+
+
+bootstrap checks failed
+max file descriptors [65535] for elasticsearch process is too low, increase to at least [65536]
+vi /etc/sysctl.conf
+新增fs.file-max=655350
+保存之后sysctl -p使设置生效
+2、vi /etc/security/limits.conf 新增
+* soft nofile 655350
+* hard nofile 655350
+
+
+max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]
+修改/etc/sysctl.conf配置文件
+vm.max_map_count=262144

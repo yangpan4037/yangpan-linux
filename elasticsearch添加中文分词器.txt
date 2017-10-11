@@ -1,22 +1,27 @@
+﻿只针对elasticsearch2.4安装，其他版本类似，切记切记！版本不同方法类似，举一反三
+https://github.com/medcl/elasticsearch-analysis-ik/tree/v1.10.4
+
 从github下载ik分词器
 	cd /usr/local/src/
-	wget https://github.com/medcl/elasticsearch-analysis-ik/archive/master.zip
+	wget https://github.com/medcl/elasticsearch-analysis-ik/archive/v1.10.4.zip
 
 重命名方便以后分不清
-	mv master.zip elasticsearch-analysis-ik-master.zip
+	mvv1.10.4.zip elasticsearch-analysis-ik-1.10.4.zip
 
 解压
-	unzip elasticsearch-analysis-ik-master.zip
+	unzip elasticsearch-analysis-ik-1.10.4.zip
 
 打包
-	cd /usr/local/src/elasticsearch-analysis-ik-master
+	cd /usr/local/src/elasticsearch-analysis-ik-1.10.4
 	mvn package
 
 创建analysis-ik目录
 	mkdir /usr/local/elasticsearch-2.4.4/plugins/analysis-ik
 
 将jar包复制到Elasticsearch的plugins/analysis-ik 目录下
-	unzip /usr/local/src/elasticsearch-analysis-ik-master/target/releases/elasticsearch-analysis-ik-5.6.1.zip -d /usr/local/elasticsearch-2.4.4/plugins/analysis-ik/
+	unzip /usr/local/src/elasticsearch-analysis-ik-1.10.4/target/releases/elasticsearch-analysis-ik-1.10.5.zip -d /usr/local/elasticsearch-2.4.4/plugins/analysis-ik/
+	
+	如果解压开就是散的文件就不需下两步
 	cp -r /usr/local/elasticsearch-2.4.4/plugins/analysis-ik/elasticsearch/. /usr/local/elasticsearch-2.4.4/plugins/analysis-ik/
 	rm -rf /usr/local/elasticsearch-2.4.4/plugins/analysis-ik/elasticsearch/
 	
@@ -26,6 +31,8 @@
 
 然后编辑配置文件elasticsearch.yml ，在后面加一行：
 	vim /usr/local/elasticsearch-2.4.4/config/elasticsearch.yml
-    index.analysis.analyzer.ik.type : "ik"
-
+	index.analysis.analyzer.ik.type : "ik"
+	
+	有这些类型
+	Analyzer: ik_smart , ik_max_word , Tokenizer: ik_smart , ik_max_word
 重启service elasticsearch restart 

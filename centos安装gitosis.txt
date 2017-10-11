@@ -1,0 +1,152 @@
+查看是否安装了git
+	git --version
+
+安装 openssh服务器与客户端工具
+	sudo yum install openssh-server openssh-client
+
+
+创建个人公钥和私钥（用于后面的git服务的管理员管理）
+	ssh-keygen -t rsa 
+	注意：公钥位置/root/.ssh/id_rsa
+
+
+安装 git服务器
+	sudo yum install git-core
+
+
+配置 git服务器
+
+创建git服务器管理用户
+	sudo useradd -m git   			//添加账户
+	sudo passwd git 	  			//修改密码
+
+
+创建git仓库存储目录
+	sudo mkdir /home/git/repositories
+
+
+设置git仓库权限
+	sudo chown git:git /home/git/repositories
+	sudo chmod 755 /home/git/repositories
+
+
+初始化全局设置
+	git config --global user.name "yangpan"
+	git config --global user.email "916780135@qq.com"
+
+
+安装python的setup tool
+	sudo yum install python-setuptools
+
+
+获取并安装gitosis
+	cd /usr/local
+	git clone git://eagain.net/gitosis.git //测试时从这拿不到，可换成 git clone https://github.com/res0nat0r/gitosis.git
+	cd gitosis
+	sudo python setup.py install
+
+
+配置gitosis
+	cp ~/.ssh/id_rsa.pub /usr/local //上面第2步生成的公匙  
+	sudo -H -u git gitosis-init < /usr/local/id_rsa.pub　//将该公匙导入gitosis里，这时本机已经有了为git的管理权限了  
+	sudo chmod 755 /home/git/repositories/gitosis-admin.git/hooks/post-update  
+
+
+为了git操作时不用输入密码,还要做以下配置
+	cat /usr/local/id_rsa.pub >> /home/git/.ssh/authorized_keys //将root的公匙导入到git目录的 authorized_keys文件中
+	chmod 600 /home/git/.ssh/authorized_keys
+
+
+配置管理gitosis
+	cd ~  
+	git clone git@39.108.66.77:repositories/gitosis-admin.git
+	cd gitosis-admin/  
+	ls -al
+	可以看到gitosis.conf是git仓库与权限配文件，keydir目录是存放其它客户机的公匙目录。
+
+查看gitosis.conf 对应的内容
+	more gitosis.conf
+	
+	内容是：
+
+	[gitosis]  
+  
+	[group gitosis-admin]
+	writable = gitosis-admin  
+	members = root@localhost.localdomain
+
+来这里git的服务已基本配置完毕，但要团队开发中用起来还要进以下配置:
+
+
+在成员机(ip=10.0.2.100)上操上面第１与第２步生成自已的公匙，并将本机的公匙copy到gitosis的keydir中，用ftp工具也行
+	scp ~/.ssh/id_rsa.pub root@39.108.66.77:~/gitosis-admin/keydir/yangpan_home_pc.pub
+	
+再切换到git服务上(ip=39.108.66.77)修改gitosis.conf，作用是声明仓库的操作权限信息
+	cd ~/gitosis-admin 
+	cat keydir/yangpan_home_pc.pub >> /home/git/.ssh/authorized_keys //将yangpan_home_pc的公匙导入到git目录的 authorized_keys文件中  
+	vi gitosis.conf
+	====================================================
+	[gitosis]
+
+	[group gitosis-admin]  
+	writable = gitosis-admin
+	members = root@localhost.localdomain
+	#加一个组myteam
+	[group myteam]  
+	members = yangpan_home_pc #这里的yangpan_home_pc对上面公匙文件名，多个成员用空格隔开
+	writable = yangpan #项目仓库名
+	====================================================
+
+把修改的仓库权限信息提交到版本库
+	git add keydir/yangpan_home_pc.pub 
+	git commit -a -m "允许 yangpan_home_pc 写访问 yangpan"
+	git push origin master
+	这时yangpan_home_pc便有权限操作yangpan仓库了，但是注意我们只是声明了仓库的操作权限但是实际上我们还并没有创建仓库
+
+
+
+创建仓库方法一：使用git账户创建仓库
+	su git
+	cd /home/git/repositories/
+	mkdir yangpan.git
+	cd yangpan.git
+	git init --bare
+	exit
+
+
+创建仓库方法二，使用成员机器remote add方式，方法二的操作都是在成员机器上操作的哦~切记
+	cd ~  
+	mkdir yangpan
+	cd yangpan
+	echo "testing ">test.txt
+	git init 	//初始化本地版本  
+	git remote add origin git@39.108.66.77:repositories/yangpan.git　//加到远程版本库中  
+	git add .  
+	git commit -a -m "初始化项目" 
+	git push origin master
+
+
+
+到现在为止我们创建了仓库，并且也声明了仓库操作权限信息，那么我们就可以在成员机上面克隆代码了。git clone git@39.108.66.77:repositories/yangpan.git
+
+
+回到成员机(ip=10.0.2.100)上
+	git clone git@39.108.66.77:repositories/yangpan.git
+
+
+
+注意如果想克隆时没有repositories，直接git clone git@39.108.66.77:yangpan.git,那么必须指定git账户的主目录
+	先查看git用户的目录在哪
+		su git
+		cd
+		pwd
+		直接cd回车，然后pwd就会显示该用户的主目录
+
+	查看用户的uid
+		id git
+
+	修改用户主目录（在root账户下）
+		usermod -d /usr/newfolder -u uid 
+		例如 
+		usermod -d /home/git-repository -u 1003 git
+		cp -r  /home/git/.* /home/git-repository/ 

@@ -1,0 +1,13 @@
+﻿.下载gradle-4.1-rc-1-all.zip（http://services.gradle.org/distributions/）
+.解压
+.配置变量
+	GRADLE_HOME=E:\yangpan\gradle\gradle-4.1-rc-1
+	path追加;%GRADLE_HOME%\bin
+.测试安装是否成功
+	gradle -version
+.修改仓库位置
+	把C:\Users\yangpan\.gradle剪切到E:\yangpan\gradle\gradle-repo\.gradle
+	GRADLE_USER_HOME=E:\yangpan\gradle\gradle-repo\.gradle
+	必须重启，现在马上。。
+.编译项目
+	在项目根路径 gradle build

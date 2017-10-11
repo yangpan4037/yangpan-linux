@@ -1,0 +1,2 @@
+下载安装
+	http://www.runoob.com/mongodb/mongodb-window-install.html
