@@ -1,0 +1,32 @@
+进入elasticsearch的bin目录
+cd /usr/local/elasticsearch-2.4.4/
+
+安装插件head插件
+./plugin install mobz/elasticsearch-head
+
+查看
+http://39.108.66.77:9200/_plugin/head
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+进入elasticsearch的bin目录
+cd /usr/local/elasticsearch-2.4.4/
+
+安装elasticsearch-HQ插件
+./plugin install royrusso/elasticsearch-HQ
+
+查看
+http://39.108.66.77:9200/_plugin/HQ/
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+进入elasticsearch的bin目录
+cd /usr/local/elasticsearch-2.4.4/
+
+安装elasticsearch-kopf插件
+./plugin install lmenezes/elasticsearch-kopf
+
+查看
+http://39.108.66.77:9200/_plugin/kopf/#!/cluster

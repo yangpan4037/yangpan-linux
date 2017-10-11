@@ -1,0 +1,7 @@
+查看全部索引
+curl 'localhost:9200/_cat/indices?v'
+
+查看某个索引下的全部数据
+curl 'localhost:9200/索引库名称/_search?q=*&pretty'
+
+

@@ -1,0 +1,16 @@
+1：首先在ik插件的config/custom目录下创建一个文件my.dic
+	cd /usr/local/elasticsearch-2.4.4/plugins/ik/config/custom/
+	vi yangpan.dic
+
+2：修改ik的配置文件
+	vim config/IKAnalyzer.cfg.xml
+	
+	找到ext_dict
+	/ext_dict
+	然后添加yangpan.dic
+
+	最终
+	<entry key="ext_dict">custom/mydict.dic;custom/single_word_low_freq.dic;custom/yangpan.dic</entry>
+
+
+http://www.bigdata1024.com/?p=89
