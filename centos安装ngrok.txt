@@ -150,22 +150,3 @@ chmod 777 start.sh
 参考文章：http://blog.csdn.net/u010887744/article/details/53957683
 参考文章：http://blog.csdn.net/u010887744/article/details/53957647
 参考文章：http://www.jianshu.com/p/df37a55a63c5
-
-
-server {
-    listen 80;
-    server_name tunnel.yangpan.site;#二级域名
-    root /usr/share/nginx/html;
-    index index.html index.htm;
-    client_max_body_size 10G;
-    location / {
-		# 这里需要配置的是本地9091端口 
-		# 表示是将本地9091端口反向代理到tunnel.yangpan.site:80上面
-		# 这样就实现了二级域名的端口转发
-        proxy_pass http://localhost:9091;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header Host $http_host;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_buffering off;
-    }
-}

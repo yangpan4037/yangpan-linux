@@ -6,9 +6,9 @@ After=network.target
   
 [Service]
 Type=forking
-ExecStart=/usr/local/mongodb-3.4.7/bin/mongod --fork --config=/usr/local/mongodb-3.4.7/bin/mongod.cfg
+ExecStart=/usr/local/mongodb-3.4.10/bin/mongod --fork --config=/usr/local/mongodb-3.4.10/bin/mongod.cfg
 ExecReload=
-ExecStop=/usr/local/mongodb-3.4.7/bin/mongod --shutdown --config=/usr/local/mongodb-3.4.7/bin/mongod.cfg
+ExecStop=/usr/local/mongodb-3.4.10/bin/mongod --shutdown --config=/usr/local/mongodb-3.4.10/bin/mongod.cfg
 PrivateTmp=true
   
 [Install]

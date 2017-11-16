@@ -2,16 +2,15 @@
 https://services.gradle.org/distributions/
 
 找到想要安装的版本，拷贝地址
-https://services.gradle.org/distributions/gradle-4.1-bin.zip
-
+https://services.gradle.org/distributions/gradle-4.3-bin.zip
 
 下载到/usr/local/src
 cd /usr/local/src
-wget https://services.gradle.org/distributions/gradle-4.1-bin.zip
+wget https://services.gradle.org/distributions/gradle-4.3-bin.zip
 
 
 解压到/usr/local
-unzip -o -d /usr/local/ /usr/local/src/gradle-4.1-bin.zip
+unzip -o -d /usr/local/ /usr/local/src/gradle-4.3-bin.zip
 
 如果unzip: command not found说明unzip未安装，安装即可
 yum install -y unzip zip
@@ -20,7 +19,7 @@ yum install -y unzip zip
 配置环境变量
 vi /etc/profile
 # gradle settings start 2017-08-23 by yangpan
-GRADLE_HOME=/usr/local/gradle-4.1
+GRADLE_HOME=/usr/local/gradle-4.3
 export PATH=${GRADLE_HOME}/bin:${PATH}
 
 立即生效
