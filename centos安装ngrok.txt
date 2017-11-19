@@ -1,0 +1,152 @@
+安装gcc
+yum install gcc
+注意：安装了就别安了，查看是否安装gcc -v
+
+
+安装git
+yum install git
+注意：安装了就别安了，查看是否安装git --version
+
+
+安装GO语言环境
+官网：https://golang.org/dl/
+中文社区：https://studygolang.com/dl
+
+
+找到最新安装包
+https://studygolang.com/dl/golang/go1.9.2.linux-amd64.tar.gz
+
+
+下载到/usr/local/src
+cd /usr/local/src/
+wget https://studygolang.com/dl/golang/go1.9.2.linux-amd64.tar.gz
+
+
+解压到/usr/local
+tar -zxvf /usr/local/src/go1.9.2.linux-amd64.tar.gz -C /usr/local/
+
+
+配置环境变量
+vi /etc/profile
+# golang settings start 2017-09-11 by yangpan
+export GOROOT=/usr/local/go
+export PATH=$PATH:$GOROOT/bin
+
+
+立即生效
+source /etc/profile
+
+
+验证是否安装成功
+go version
+
+
+在服务器上搭建Ngrok服务
+git上查看ngrok
+https://github.com/inconshreveable/ngrok
+
+
+克隆ngrok
+cd /usr/local/src
+git clone https://github.com/inconshreveable/ngrok.git
+
+
+生成证书
+在自生成证书时需要一个解析到服务器上的主域名（二级域名也可以，本人已经验证过），现在以"yangpan.site"为例:
+
+cd /usr/local/src/ngrok/
+
+#这里修改为自己的域名
+export NGROK_DOMAIN="yangpan.site"
+openssl genrsa -out rootCA.key 2048
+openssl req -x509 -new -nodes -key rootCA.key -subj "/CN=$NGROK_DOMAIN" -days 5000 -out rootCA.pem
+openssl genrsa -out device.key 2048
+openssl req -new -key device.key -subj "/CN=$NGROK_DOMAIN" -out device.csr
+openssl x509 -req -in device.csr -CA rootCA.pem -CAkey rootCA.key -CAcreateserial -out device.crt -days 5000
+
+
+将新生成的证书，替换掉assets/client/tls下的证书
+cp /usr/local/src/ngrok/rootCA.pem /usr/local/src/ngrok/assets/client/tls/ngrokroot.crt
+cp /usr/local/src/ngrok/device.crt /usr/local/src/ngrok/assets/server/tls/snakeoil.crt
+cp /usr/local/src/ngrok/device.key /usr/local/src/ngrok/assets/server/tls/snakeoil.key
+
+
+编译生成ngrokd（服务端）
+#这里是交叉编译，linux系统GOOS=linux,64位系统GOARCH=amd64，32位系统GOARCH=386
+#当前系统可用go env查看
+GOOS=linux GOARCH=amd64
+make release-server
+
+
+编译生成ngrok（客户端）
+我这里生成windows下的客户端
+为go生成交叉编译环境，执行如下命令： 
+#这里是交叉编译，linux系统GOOS=linux,64位系统GOARCH=amd64，32位系统GOARCH=386
+#当前系统可用go env查看
+GOOS=windows GOARCH=amd64 make release-client
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++	#linux生成											+
++	make release-client									+
++	#windows生成										+
++	GOOS=windows GOARCH=amd64 make release-client		+	
++	#mac生成											+
++	GOOS=darwin GOARCH=amd64 make release-client		+	
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+成功后/usr/local/src/ngrok/bin下面的windows_amd64就是客户端，拷贝到windows就好了
+
+
+
+启动服务端：
+cd 到服务端目录ngrok/，
+可以指定证书，域名，端口号来启动：
+
+不建议：
+./bin/ngrokd -tlsKey=device.key -tlsCrt=device.crt -domain="yangpan.site" -httpAddr=":9091" -httpsAddr=":9092" -tunnelAddr=":9093"
+
+建议这个：
+./bin/ngrokd -tlsKey="assets/server/tls/snakeoil.key" -tlsCrt="assets/server/tls/snakeoil.crt" -domain="yangpan.site" -httpAddr=":9091" -httpsAddr=":9092" -tunnelAddr=":9093"
+
+
+
+
+
+
+下载windows_amd64
+在windows_amd64目录下新建一个ngrok.cfg文件，内容如下：
+server_addr: "uboff.com:8083"
+trust_host_root_certs: false
+tunnels:
+  http:
+    subdomain: "www"
+    proto:
+      http: "8090"
+      
+  https:
+    subdomain: "www"
+    proto:
+      https: "8091"
+ 
+  ssh:
+    remote_port: 2222
+    proto:
+      tcp: "22"
+把windows_amd64文件夹剪切到D盘
+D:
+cd D:\windows_amd64
+ngrok.exe -config ngrok.cfg start http https ssh
+
+
+注意：server_addr的端口应和服务端启动命令tunnelAddr的一致。
+
+
+# start.sh
+cd /root/ngrok/
+nohup bin/ngrokd -tlsKey="assets/server/tls/snakeoil.key" -tlsCrt="assets/server/tls/snakeoil.crt" -domain="$NGROK_DOMAIN"  -httpAddr=":9091" -httpsAddr=":9092" -tunnelAddr=":9093"
+
+chmod 777 start.sh 
+
+参考文章：https://github.com/inconshreveable/ngrok
+参考文章：https://ubock.com/article/31
+参考文章：http://blog.csdn.net/u010887744/article/details/53957683
+参考文章：http://blog.csdn.net/u010887744/article/details/53957647
+参考文章：http://www.jianshu.com/p/df37a55a63c5

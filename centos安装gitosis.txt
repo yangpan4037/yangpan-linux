@@ -59,7 +59,7 @@
 
 配置管理gitosis
 	cd ~  
-	git clone git@39.108.66.77:repositories/gitosis-admin.git
+	git clone git@39.108.66.77:gitosis-admin.git
 	cd gitosis-admin/  
 	ls -al
 	可以看到gitosis.conf是git仓库与权限配文件，keydir目录是存放其它客户机的公匙目录。
