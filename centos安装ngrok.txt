@@ -57,11 +57,10 @@ git clone https://github.com/inconshreveable/ngrok.git
 cd /usr/local/src/ngrok/
 
 #这里修改为自己的域名
-export NGROK_DOMAIN="yangpan.site"
 openssl genrsa -out rootCA.key 2048
-openssl req -x509 -new -nodes -key rootCA.key -subj "/CN=$NGROK_DOMAIN" -days 5000 -out rootCA.pem
+openssl req -x509 -new -nodes -key rootCA.key -subj "/CN=yangpan.site" -days 5000 -out rootCA.pem
 openssl genrsa -out device.key 2048
-openssl req -new -key device.key -subj "/CN=$NGROK_DOMAIN" -out device.csr
+openssl req -new -key device.key -subj "/CN=yangpan.site" -out device.csr
 openssl x509 -req -in device.csr -CA rootCA.pem -CAkey rootCA.key -CAcreateserial -out device.crt -days 5000
 
 
@@ -113,18 +112,17 @@ cd 到服务端目录ngrok/，
 
 下载windows_amd64
 在windows_amd64目录下新建一个ngrok.cfg文件，内容如下：
-server_addr: "uboff.com:8083"
-trust_host_root_certs: false
+server_addr: "yangpan.site:9093"
 tunnels:
   http:
     subdomain: "www"
     proto:
-      http: "8090"
+      http: "82"
       
   https:
     subdomain: "www"
     proto:
-      https: "8091"
+      https: "82"
  
   ssh:
     remote_port: 2222
@@ -139,14 +137,47 @@ ngrok.exe -config ngrok.cfg start http https ssh
 注意：server_addr的端口应和服务端启动命令tunnelAddr的一致。
 
 
-# start.sh
-cd /root/ngrok/
-nohup bin/ngrokd -tlsKey="assets/server/tls/snakeoil.key" -tlsCrt="assets/server/tls/snakeoil.crt" -domain="$NGROK_DOMAIN"  -httpAddr=":9091" -httpsAddr=":9092" -tunnelAddr=":9093"
+制作一个启动器
+vi 
 
-chmod 777 start.sh 
+# start.sh
+cd /usr/local/src/ngrok/
+nohup /usr/local/src/ngrok/bin/ngrokd -tlsKey="/usr/local/src/ngrok/device.key" -tlsCrt="/usr/local/src/ngrok/device.crt" -domain="yangpan.site" -httpAddr=":9091" -httpsAddr=":9092"  -tunnelAddr=":9093"
+
+chmod 777 /usr/local/src/ngrok/start.sh 
 
 参考文章：https://github.com/inconshreveable/ngrok
 参考文章：https://ubock.com/article/31
 参考文章：http://blog.csdn.net/u010887744/article/details/53957683
 参考文章：http://blog.csdn.net/u010887744/article/details/53957647
 参考文章：http://www.jianshu.com/p/df37a55a63c5
+
+
+
+
+vi /lib/systemd/system/ngrok.service
+
+[Unit]
+Description=ngrok
+After=network.target
+
+[Service]
+PrivateTmp=true
+Type=simple
+Restart=always
+RestartSec=1min
+StandardOutput=null
+StandardError=null
+ExecStart=/usr/local/src/ngrok/bin/ngrokd -tlsKey=/usr/local/src/ngrok/device.key -tlsCrt=/usr/local/src/ngrok/device.crt -domain=yangpan.site -httpAddr=:9091 -httpsAddr=:9092  -tunnelAddr=:9093 > /usr/local/src/ngrok/logs/ngrok.log 2>&1&
+ExecStop=/usr/bin/killall ngrok
+
+[Install]
+WantedBy=multi-user.target
+
+
+开机启动
+systemctl enable ngrok.service
+
+
+查看所有已启动的服务  
+systemctl list-units --type=service

@@ -16,3 +16,7 @@ WantedBy=multi-user.target
 
 开机启动
 systemctl enable mongod.service
+
+
+查看所有已启动的服务	
+systemctl list-units --type=service

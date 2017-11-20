@@ -150,3 +150,25 @@
 		例如 
 		usermod -d /home/git-repository -u 1003 git
 		cp -r  /home/git/.* /home/git-repository/ 
+
+
+
+
+
+
+错误信息：
+	Counting objects: 9, done.
+	Delta compression using up to 2 threads.
+	Compressing objects: 100% (5/5), done.
+	Writing objects: 100% (5/5), 506 bytes, done.
+	Total 5 (delta 2), reused 0 (delta 0)
+	error: insufficient permission for adding an object to repository database ./objects
+	fatal: failed to write object
+	error: unpack failed: unpack-objects abnormal exit
+原因：
+	git库权限的问题
+	$ ls -la，查看git库的所有者
+
+解决：
+	在git库目录下：
+	sudo chown -R git:git /home/git/repositories/（或者某一个库mtk6573.git）

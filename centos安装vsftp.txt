@@ -16,3 +16,20 @@
 
 开机启动
 	systemctl enable vsftpd.service
+
+
+添加ftpuser用于ftp操作
+useradd  ftpuser
+echo 这里是密码|passwd --stdin  ftpuser
+
+修改目录
+mv /home/ftpuser/ /home/ftp/
+
+查看用户的uid
+	id ftpuser
+
+修改用户主目录（在root账户下）
+	usermod -d /home/ftp/resources -u uid 
+	例如 
+	usermod -d /home/ftp/resources -u 1001 ftpuser
+	chmod -R 777 /home/ftp/

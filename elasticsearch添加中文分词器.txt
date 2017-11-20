@@ -6,7 +6,7 @@ https://github.com/medcl/elasticsearch-analysis-ik/tree/v1.10.4
 	wget https://github.com/medcl/elasticsearch-analysis-ik/archive/v1.10.4.zip
 
 重命名方便以后分不清
-	mvv1.10.4.zip elasticsearch-analysis-ik-1.10.4.zip
+	mv v1.10.4.zip elasticsearch-analysis-ik-1.10.4.zip
 
 解压
 	unzip elasticsearch-analysis-ik-1.10.4.zip
@@ -19,7 +19,7 @@ https://github.com/medcl/elasticsearch-analysis-ik/tree/v1.10.4
 	mkdir /usr/local/elasticsearch-2.4.4/plugins/analysis-ik
 
 将jar包复制到Elasticsearch的plugins/analysis-ik 目录下
-	unzip /usr/local/src/elasticsearch-analysis-ik-1.10.4/target/releases/elasticsearch-analysis-ik-1.10.5.zip -d /usr/local/elasticsearch-2.4.4/plugins/analysis-ik/
+	unzip /usr/local/src/elasticsearch-analysis-ik-1.10.4/target/releases/elasticsearch-analysis-ik-1.10.4.zip -d /usr/local/elasticsearch-2.4.4/plugins/analysis-ik/
 	
 	如果解压开就是散的文件就不需下两步
 	cp -r /usr/local/elasticsearch-2.4.4/plugins/analysis-ik/elasticsearch/. /usr/local/elasticsearch-2.4.4/plugins/analysis-ik/
@@ -27,7 +27,7 @@ https://github.com/medcl/elasticsearch-analysis-ik/tree/v1.10.4
 	
 
 再把解压出的ik目录（配置和词典等），复制到Elasticsearch的config 目录下。
-	cp -r /usr/local/src/elasticsearch-analysis-ik-master/config/. /usr/local/elasticsearch-2.4.4/config/
+	cp -r /usr/local/src/elasticsearch-analysis-ik-1.10.4/config/. /usr/local/elasticsearch-2.4.4/config/
 
 然后编辑配置文件elasticsearch.yml ，在后面加一行：
 	vim /usr/local/elasticsearch-2.4.4/config/elasticsearch.yml

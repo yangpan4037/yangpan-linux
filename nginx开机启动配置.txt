@@ -8,9 +8,9 @@ After=network.target
   
 [Service]
 Type=forking
-ExecStart=/usr/local/nginx-1.13.5/sbin/nginx
-ExecReload=/usr/local/nginx-1.13.5/sbin/nginx -s reload
-ExecStop=/usr/local/nginx-1.13.5/sbin/nginx -s quit
+ExecStart=/usr/local/nginx-1.13.6/sbin/nginx
+ExecReload=/usr/local/nginx-1.13.6/sbin/nginx -s reload
+ExecStop=/usr/local/nginx-1.13.6/sbin/nginx -s quit
 PrivateTmp=true
   
 [Install]

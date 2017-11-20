@@ -3,21 +3,21 @@ http://maven.apache.org/download.cgi
 
 
 拷贝文件名为 *-bin.tar.gz 的链接地址；
-http://mirrors.tuna.tsinghua.edu.cn/apache/maven/maven-3/3.5.0/binaries/apache-maven-3.5.0-bin.tar.gz
+http://mirrors.shuosc.org/apache/maven/maven-3/3.5.2/binaries/apache-maven-3.5.2-bin.tar.gz
 
 
 下载到/usr/local/src
 cd /usr/local/src
-wget http://mirrors.tuna.tsinghua.edu.cn/apache/maven/maven-3/3.5.0/binaries/apache-maven-3.5.0-bin.tar.gz
+wget http://mirrors.shuosc.org/apache/maven/maven-3/3.5.2/binaries/apache-maven-3.5.2-bin.tar.gz
 
 
 解压到/usr/local
-tar -zxvf /usr/local/src/apache-maven-3.5.0-bin.tar.gz -C /usr/local/
-
+tar -zxvf /usr/local/src/apache-maven-3.5.2-bin.tar.gz -C /usr/local/
 
 配置环境变量
 vi /etc/profile
-export MAVEN_HOME=/usr/local/apache-maven-3.5.0
+# maven settings start 2017-08-23 by yangpan
+export MAVEN_HOME=/usr/local/apache-maven-3.5.2
 export PATH=$PATH:$MAVEN_HOME/bin
 
 
@@ -31,3 +31,60 @@ echo $PATH
 
 验证是否安装成功
 mvn -version
+
+修改阿里maven源
+vim /usr/local/apache-maven-3.5.2/conf/settings.xml
+搜索 mirrors
+在mirrors标签里加入
+	<mirror>
+		<id>alimaven</id>
+		<name>aliyun maven</name>
+		<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+		<mirrorOf>central</mirrorOf>
+	</mirror>
+	<mirror>
+		<id>Central</id>
+		<url>http://repo1.maven.org/maven2</url>
+		<mirrorOf>central</mirrorOf>
+	</mirror>
+	<mirror>
+		<id>CN</id>
+		<name>OSChina Central</name>
+		<url>http://maven.oschina.net/content/groups/public/</url>
+		<mirrorOf>central</mirrorOf>
+	</mirror>
+
+	<mirror>
+		<id>repo2</id>
+		<mirrorOf>central</mirrorOf>
+		<name>Human Readable Name for this Mirror.</name>
+		<url>http://repo2.maven.org/maven2/</url>
+	</mirror>
+
+	<mirror>
+		<id>net-cn</id>
+		<mirrorOf>central</mirrorOf>
+		<name>Human Readable Name for this Mirror.</name>
+		<url>http://maven.net.cn/content/groups/public/</url>
+	</mirror>
+
+	<mirror>
+		<id>ui</id>
+		<mirrorOf>central</mirrorOf>
+		<name>Human Readable Name for this Mirror.</name>
+		<url>http://uk.maven.org/maven2/</url>
+	</mirror>
+
+	<mirror>
+		<id>ibiblio</id>
+		<mirrorOf>central</mirrorOf>
+		<name>Human Readable Name for this Mirror.</name>
+		<url>http://mirrors.ibiblio.org/pub/mirrors/maven2/</url>
+	</mirror>
+
+	<mirror>
+		<id>jboss-public-repository-group</id>
+		<mirrorOf>central</mirrorOf>
+		<name>JBoss Public Repository Group</name>
+		<url>http://repository.jboss.org/nexus/content/groups/public</url>
+	</mirror>
