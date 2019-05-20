@@ -1,0 +1,29 @@
+查找Docker Hub上的jenkins镜像
+    docker search jenkins
+
+拉取官方的镜像
+    docker pull jenkins
+    ps：也可以根据标签拉取就像这样 docker pull jenkins:alpine（标签名通过https://hub.docker.com查看）
+
+查看本地镜像列表
+    docker images
+    ps：也可以根据名称显示本地镜像列表就像这样  docker images | grep jenkins 或者 docker images jenkins
+    删除镜像：docker rmi 镜像名称
+
+    
+准备数据目录
+    mkdir /usr/local/docker/jenkins
+    chmod -R 777 /usr/local/docker/jenkins
+
+
+使用镜像运行容器
+    docker run --name jenkins -d -p 8080:8080 -p 50000:50000 -v /usr/local/docker/jenkins:/var/jenkins_home jenkins
+    命令说明：
+    --name：指定容器名称
+    -d：让容器在后台运行。
+    -p 8080:8080：将容器的 8080 端口映射到主机的 8080 端口。
+
+
+进行配置
+    1.浏览器输入： 服务器IP:8080 进行可视化配置。
+    2.查看密码： cat /usr/local/docker/jenkins/secrets/initialAdminPassword 然后输入浏览器配置页面

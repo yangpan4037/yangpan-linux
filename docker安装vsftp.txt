@@ -1,0 +1,24 @@
+查找 Docker Hub 上的 vsftpd 镜像
+    docker search vsftpd
+
+
+拉取官方的镜像
+    docker pull fauria/vsftpd
+
+
+查看本地镜像列表
+    docker images
+    ps：也可以根据名称显示本地镜像列表就像这样  docker images | grep vsftpd  或者  docker images vsftpd
+    删除镜像：docker rmi 镜像名称
+
+
+使用镜像运行容器
+    docker run -d -v 映射宿主机目录:/home/vsftpd/这里是ftp用户目录 -p 20:20 -p 21:21 -p 21100-21110:21100-21110 -e FTP_USER=这里是ftp用户名 -e FTP_PASS=这里是ftp用户密码 --name vsftpd fauria/vsftpd
+
+    例如：
+    docker run --name vsftpd -d -p 20:20 -p 21:21 -p 21100-21110:21100-21110 -v /usr/local/docker/vsftpd/resources:/home/vsftpd/ftp -e FTP_USER=ftp -e FTP_PASS=yp916780135 -e FILE_OPEN_MODE=0777 fauria/vsftpd
+
+
+参考文章
+    https://github.com/fauria/docker-vsftpd
+    https://www.jianshu.com/p/6b619d7f78c3

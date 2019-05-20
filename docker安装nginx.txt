@@ -1,0 +1,50 @@
+查找 Docker Hub 上的 nginx 镜像
+    docker search nginx
+
+拉取官方的镜像
+    docker pull nginx
+    也可以根据标签拉取就像这样 docker pull nginx:标签名（标签名通过https://hub.docker.com查看）
+
+查看本地镜像列表
+    docker images
+    ps：也可以根据名称显示本地镜像列表就像这样  docker images | grep nginx  或者  docker images nginx
+    删除镜像：docker rmi 镜像名称
+
+
+使用镜像运行容器并指定配置
+    docker run --name nginx -d -p 80:80 -v /usr/local/docker/:/usr/share/nginx/html -v /usr/local/docker/nginx/conf.d:/etc/nginx/conf.d -v /usr/local/docker/nginx/logs:/var/log/nginx nginx
+
+    命令说明：
+    --name：指定容器名称
+    -d：让容器在后台运行。
+    -p 80:80：将容器的 80 端口映射到主机的 80 端口。
+    -v /usr/local/docker/nginx/html:/usr/share/nginx/html 将主机中/usr/local/docker/nginx/html目录挂载到容器的/usr/share/nginx/html
+    -v /usr/local/docker/nginx/conf.d:/etc/nginx/conf.d  将主机中/usr/local/docker/nginx/conf.d目录挂载到容器的/etc/nginx/conf.d
+    -v /usr/local/docker/nginx/logs:/var/log/nginx        将主机中/usr/local/docker/nginx/logs目录挂载到容器的/var/log/nginx
+
+
+启动一个临时容器用来拷贝配置文件
+    docker run --name nginx-temp -d -p 90:80 nginx
+    docker ps
+    docker cp 745ca7b95d4a:/etc/nginx/nginx.conf /usr/local/docker/nginx/nginx.conf
+    docker cp 745ca7b95d4a:/etc/nginx/conf.d /usr/local/docker/nginx
+    docker cp 745ca7b95d4a:/usr/share/nginx/html /usr/local/docker/nginx
+
+关闭临时容器
+    docker stop nginx-temp
+    docker rm nginx-temp
+
+
+停止容器
+    docker stop 容器ID
+    docker stop 容器名称
+    ps：一般我们停止后记得清一下记录，防止下次启动提示容器名称被占用 docker rm nginx
+
+
+进入容器
+    docker exec -it 容器的名称 bash
+    我们可以通过运行exit命令或者使用CTRL+D来退出容器。
+
+
+重载nginx
+    docker exec -it nginx service nginx reload

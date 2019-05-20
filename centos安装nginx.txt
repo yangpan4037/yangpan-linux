@@ -10,33 +10,33 @@ http://nginx.org/download/
 
 
 找到最新版下载地址
-http://nginx.org/download/nginx-1.13.6.tar.gz
+http://nginx.org/download/nginx-1.15.12.tar.gz
 
 
 下载到/usr/local/src/
 cd /usr/local/src
-wget http://nginx.org/download/nginx-1.13.6.tar.gz
+wget http://nginx.org/download/nginx-1.15.12.tar.gz
 
 
 解压到/usr/local/
-tar -zxvf /usr/local/src/nginx-1.13.6.tar.gz -C /usr/local/
+tar -zxvf /usr/local/src/nginx-1.15.12.tar.gz -C /usr/local/
 
 把编译前的文件夹重命名
-mv /usr/local/nginx-1.13.6/ /usr/local/nginx-1.13.6-make-before
+mv /usr/local/nginx-1.15.12/ /usr/local/nginx-1.15.12-make-before
 
 编译
-cd /usr/local/nginx-1.13.6-make-before
-./configure --prefix=/usr/local/nginx-1.13.6 
+cd /usr/local/nginx-1.15.12-make-before
+./configure --prefix=/usr/local/nginx-1.15.12 
 make
 make install
 
 删除编译前的文件夹
-rm -rf /usr/local/nginx-1.13.6-make-before
+rm -rf /usr/local/nginx-1.15.12-make-before
 
 启动
-cd /usr/local/nginx
+cd /usr/local/nginx-1.15.12/sbin
 ./nginx
 
 
-nginx: [error] open() "/usr/local/nginx-1.13.6/logs/nginx.pid" failed (2: No such file or directory)
-/usr/local/nginx-1.13.6/sbin/nginx -c /usr/local/nginx-1.13.6/conf/nginx.conf
+nginx: [error] open() "/usr/local/nginx-1.15.12/logs/nginx.pid" failed (2: No such file or directory)
+/usr/local/nginx-1.15.12/sbin/nginx -c /usr/local/nginx-1.15.12/conf/nginx.conf

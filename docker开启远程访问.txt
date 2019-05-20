@@ -1,0 +1,35 @@
+前言
+    首先说明一下：我是用的 docker 18.09.5 你可以通过 docker --version 查看版本
+
+
+修改配置文件
+    vim /usr/lib/systemd/system/docker.service 
+    找到 ExecStart 这一句，改为：
+    ExecStart=/usr/bin/dockerd  -H tcp://0.0.0.0:2375  -H unix:///var/run/docker.sock 
+
+
+重新加载配置文件 
+    systemctl daemon-reload 
+
+
+重启服务 
+    systemctl restart docker.service 
+
+
+查看端口是否开启 
+    netstat -nptl 
+
+
+直接curl看是否生效 
+    curl http://127.0.0.1:2375/info
+
+
+测试远程访问
+    http://你的公网ip:2375/version
+
+
+参考文章
+    https://www.jianshu.com/p/b5f8e79a7c4d
+    https://www.cnblogs.com/java-my-life/p/7001998.html
+    https://blog.csdn.net/yelllowcong/article/details/80371248
+

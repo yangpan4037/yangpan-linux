@@ -1,0 +1,29 @@
+安装前提
+    首先必须先安装了mysql
+    并且创建了gogs数据库
+
+
+从 Docker Hub 拉取镜像
+    docker pull gogs/gogs
+
+
+在本地创建一个 gogs 目录
+    mkdir -p /var/gogs
+
+用镜像运行容器
+    docker run --name=gogs -p 10022:22 -p 10080:3000 -v /var/gogs:/data gogs/gogs
+
+
+进行配置
+    进入：http://服务器IP:10080
+
+    以下几项需要修改:
+    数据库主机：http://服务器IP:3306
+    域名：http://服务器IP
+    端口：10080
+    应用URL：http://服务器IP:10080
+
+
+
+https://www.jianshu.com/p/2a7acb07b352
+https://github.com/gogs/gogs/tree/master/docker

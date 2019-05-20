@@ -1,0 +1,25 @@
+查找Docker Hub上的redis镜像
+    docker search  redis
+
+拉取官方的镜像
+    docker pull redis
+    也可以根据标签拉取就像这样 docker pull redis:标签名（标签名通过https://hub.docker.com查看）
+
+查看本地镜像列表
+    docker images
+    ps：也可以根据名称显示本地镜像列表就像这样  docker images | grep redis  或者  docker images redis
+    删除镜像：docker rmi 镜像名称
+
+使用镜像运行容器
+    docker run --name redis -d -p 6379:6379 redis
+    docker run --name redis -d -p 6379:6379 redis redis-server --appendonly yes
+
+    命令说明：
+    -d：让容器在后台运行。
+    -p 6379:6379：将容器的 6379 端口映射到主机的 6379 端口。
+    redis-server --appendonly yes : 在容器执行redis-server启动命令，并打开redis持久化配置
+
+连接查看容器
+    docker exec -it 容器ID或容器名称 redis-cli
+    info
+    我们可以通过运行exit命令或者使用CTRL+D来退出容器。
